@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import * as todoService from './api/todos';
 import { TodoItem } from './components/TodoItem/TodoItem';
 import { Todo } from './types/Todo';
@@ -50,7 +50,12 @@ export const App: React.FC = () => {
     setSelectedFilter(newFilterState);
   }
 
-  const filteredTodos = filterTodos(selectedFilter, '', todos);
+  const filteredTodos = filterTodos(selectedFilter, todos);
+
+  const notConpletedCount = useMemo(
+    () => todos.filter(todo => !todo.completed).length,
+    [todos],
+  );
 
   return (
     <div className="todoapp">
@@ -87,7 +92,7 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              3 items left
+              {notConpletedCount} items left
             </span>
 
             <nav className="filter" data-cy="Filter">
