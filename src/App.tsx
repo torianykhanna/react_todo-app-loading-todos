@@ -6,19 +6,12 @@ import { TodoItem } from './components/TodoItem/TodoItem';
 import { Todo } from './types/Todo';
 import classNames from 'classnames';
 import { filterTodos } from './filtersTodos';
-
-export enum FilterState {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [selectedFilter, setSelectedFilter] = useState<FilterState>(
-    FilterState.All,
-  );
+  const [selectedFilter, setSelectedFilter] = useState<Filter>(Filter.All);
 
   const errorTimerId = useRef(0);
   const showError = (message: string) => {
@@ -41,10 +34,7 @@ export const App: React.FC = () => {
     setErrorMessage('');
   }
 
-  function handleFilterChange(
-    event: React.MouseEvent,
-    newFilterState: FilterState,
-  ) {
+  function handleFilterChange(event: React.MouseEvent, newFilterState: Filter) {
     event.preventDefault();
 
     setSelectedFilter(newFilterState);
@@ -99,10 +89,10 @@ export const App: React.FC = () => {
               <a
                 href="#/"
                 className={classNames('filter__link', {
-                  selected: selectedFilter === FilterState.All,
+                  selected: selectedFilter === Filter.All,
                 })}
                 data-cy="FilterLinkAll"
-                onClick={event => handleFilterChange(event, FilterState.All)}
+                onClick={event => handleFilterChange(event, Filter.All)}
               >
                 All
               </a>
@@ -110,10 +100,10 @@ export const App: React.FC = () => {
               <a
                 href="#/active"
                 className={classNames('filter__link', {
-                  selected: selectedFilter === FilterState.Active,
+                  selected: selectedFilter === Filter.Active,
                 })}
                 data-cy="FilterLinkActive"
-                onClick={event => handleFilterChange(event, FilterState.Active)}
+                onClick={event => handleFilterChange(event, Filter.Active)}
               >
                 Active
               </a>
@@ -121,12 +111,10 @@ export const App: React.FC = () => {
               <a
                 href="#/completed"
                 className={classNames('filter__link', {
-                  selected: selectedFilter === FilterState.Completed,
+                  selected: selectedFilter === Filter.Completed,
                 })}
                 data-cy="FilterLinkCompleted"
-                onClick={event =>
-                  handleFilterChange(event, FilterState.Completed)
-                }
+                onClick={event => handleFilterChange(event, Filter.Completed)}
               >
                 Completed
               </a>
