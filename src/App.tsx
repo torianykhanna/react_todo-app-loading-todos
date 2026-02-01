@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import classNames from 'classnames';
 import * as todoService from './api/todos';
 import { TodoItem } from './components/TodoItem/TodoItem';
 import { Todo } from './types/Todo';
-import classNames from 'classnames';
-import { filterTodos } from './filtersTodos';
 import { Filter } from './types/Filter';
+import { getFilteredTodos } from './utils/getFilteredTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -14,6 +14,7 @@ export const App: React.FC = () => {
   const [selectedFilter, setSelectedFilter] = useState<Filter>(Filter.All);
 
   const errorTimerId = useRef(0);
+
   const showError = (message: string) => {
     setErrorMessage(message);
     window.clearTimeout(errorTimerId.current);
@@ -40,7 +41,7 @@ export const App: React.FC = () => {
     setSelectedFilter(newFilterState);
   }
 
-  const filteredTodos = filterTodos(selectedFilter, todos);
+  const filteredTodos = getFilteredTodos(todos, selectedFilter);
 
   const notConpletedCount = useMemo(
     () => todos.filter(todo => !todo.completed).length,
@@ -148,16 +149,6 @@ export const App: React.FC = () => {
           onClick={() => handleHideError()}
         />
         {errorMessage}
-        {/* show only one message at a time */}
-        {/*
-        <br />
-        Title should not be empty
-        <br />
-        Unable to add a todo
-        <br />
-        Unable to delete a todo
-        <br />
-        Unable to update a todo */}
       </div>
     </div>
   );
